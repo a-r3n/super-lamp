@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+axios.post('http://localhost:4000/graphql', {
+  query: `{ getQuestions { id questionText answer } }`
+}, {
+  headers: {
+    'Content-Type': 'application/json'
+  }
+}).then(response => {
+  // handle response
+}).catch(error => {
+  console.error('Error fetching questions:', error);
+});
+
+
 const Quiz = () => {
   const [questions, setQuestions] = useState([]);
   const [score, setScore] = useState(0);
