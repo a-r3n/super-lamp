@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
-const Question = require('../models/question'); 
+const Question = require('../models/question');  // Ensure this path matches the location of your Question model
 
-mongoose.connect('mongodb://localhost:27017/quizdb', { useNewUrlParser: true, useUnifiedTopology: true });
+// Environment variables should be used to keep sensitive information secure
+const dbURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/quizdb';
+
+mongoose.connect(dbURI)
+  .then(() => console.log('MongoDB connected successfully.'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 const questions = [
   { questionText: "In the 12 months to December 2023, Australia’s inflation rate was 4.1%. In the 12 months to March 2024, has it gone up, gone down or stayed steady?", answer: "Gone down (to 3.6%)" },
@@ -13,16 +18,19 @@ const questions = [
   { questionText: "The world’s largest election is currently underway in which country?", answer: "India, where an estimated 969 million people will cast their vote" },
   { questionText: "The World Health Organisation, Google and MIT are backing a new company NanniAI that believes it can translate what?", answer: "A crying baby" },
   { questionText: "America’s FTC is suing to block an $8.5 billion merger between US fashion giants Tapestry and Capri Holdings, intended to rival the giant European fashion houses. Name one brand owned by Tapestry or Capri", answer: "Tapestry own Coach, Kate Spade and Stuart Weitzman. Capri own Versace, Jimmy Choo and Michael Kors" },
-  { questionText: "Former President Trump is set to receive an additional 36 million shares (today worth $1.3 billion) in Truth Social owner Trump Media & Technology Group for what: a) Using his profile to promote Truth Social b) Offering advice and consulting services to the company c) The share price remaining above a certain level d) Not selling any of his shares", answer: "c) The share price remaining above a certain level" },
-  // Add as many questions as you want here
+  { questionText: "Former President Trump is set to receive an additional 36 million shares (today worth $1.3 billion) in Truth Social owner Trump Media & Technology Group for what: a) Using his profile to promote Truth Social b) Offering advice and consulting services to the company c) The share price remaining above a certain level d) Not selling any of his shares", answer: "c) The share price remaining above a certain level" }
 ];
 
 const seedDB = async () => {
-  await Question.deleteMany({});
-  await Question.insertMany(questions);
-  console.log("Database seeded!");
+  try {
+    await Question.deleteMany({});
+    await Question.insertMany(questions);
+    console.log("Database seeded!");
+  } catch (error) {
+    console.error("Error seeding database:", error);
+  } finally {
+    mongoose.connection.close();
+  }
 };
 
-seedDB().then(() => {
-  mongoose.connection.close();
-});
+seedDB();
