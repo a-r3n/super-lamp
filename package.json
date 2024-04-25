@@ -9,6 +9,7 @@
         "deploy": "npm run build && npm run start --prefix backend"
     },
     "dependencies": {
+        "dotenv": "^8.2.0", 
         "concurrently": "^6.5.1"
     }
 }

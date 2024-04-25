@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
   "start": "node server.js",
-  "postinstall": "echo 'Post install scripts if any'",
+  "seed": "node ./seed/seed.js",
+  "postinstall": "npm run seed && echo 'Post install scripts if any'",
   "render-build":"npm install && npm run build"
   },
   "keywords": [],
