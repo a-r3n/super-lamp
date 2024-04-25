@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 const port = process.env.PORT || 4000;
 
-const uri = process.env.DB_URI;
+const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
   useNewUrlParser: true,

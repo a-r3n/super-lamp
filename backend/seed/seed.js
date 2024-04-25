@@ -18,19 +18,32 @@ const questions = [
   { questionText: "The world’s largest election is currently underway in which country?", answer: "India, where an estimated 969 million people will cast their vote" },
   { questionText: "The World Health Organisation, Google and MIT are backing a new company NanniAI that believes it can translate what?", answer: "A crying baby" },
   { questionText: "America’s FTC is suing to block an $8.5 billion merger between US fashion giants Tapestry and Capri Holdings, intended to rival the giant European fashion houses. Name one brand owned by Tapestry or Capri", answer: "Tapestry own Coach, Kate Spade and Stuart Weitzman. Capri own Versace, Jimmy Choo and Michael Kors" },
-  { questionText: "Former President Trump is set to receive an additional 36 million shares (today worth $1.3 billion) in Truth Social owner Trump Media & Technology Group for what: a) Using his profile to promote Truth Social b) Offering advice and consulting services to the company c) The share price remaining above a certain level d) Not selling any of his shares", answer: "c) The share price remaining above a certain level" }
+  { questionText: "Former President Trump is set to receive an additional 36 million shares (today worth $1.3 billion) in Truth Social owner Trump Media & Technology Group for what: a) Using his profile to promote Truth Social b) Offering advice and consulting services to the company c) The share price remaining above a certain level d) Not selling any of his shares", answer: "c) The share price remaining above a certain level" },
+  { questionText: "Hello Hello", answer: "Test Test" }
 ];
 
 const seedDB = async () => {
+  console.log("Connecting to database...")
   try {
-    await Question.deleteMany({});
-    await Question.insertMany(questions);
-    console.log("Database seeded!");
-  } catch (error) {
-    console.error("Error seeding database:", error);
-  } finally {
-    mongoose.connection.close();
-  }
-};
+    await mongoose.connect(dbURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+      });
+      console.log("Connected to MongoDB successfully.");
+      console.log("Deleting existing questions...");
+      await Question.deleteMany({});
+      console.log("Existing questions deleted.");
+  
+      console.log("Inserting new questions...");
+      await Question.insertMany(questions);
+      console.log("Database seeded!");
+    } catch (error) {
+      console.error("Error seeding database:", error);
+    } finally {
+      console.log("Closing database connection...");
+      await mongoose.connection.close();
+      console.log("Database connection closed.");
+    }
+  };
 
 seedDB();
