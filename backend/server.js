@@ -24,10 +24,11 @@ async function run() {
     await client.connect();
     console.log("Connected to MongoDB");
 
-const server = new ApolloServer({ typeDefs, resolvers });
+    const server = new ApolloServer({ typeDefs, resolvers });
 
-const startServer = async () => {
-  try {
+    await server.start();
+    server.applyMiddleware({ app });
+
     await mongoose.connect('mongodb://localhost:27017/quizdb', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -35,17 +36,14 @@ const startServer = async () => {
     });
     console.log("MongoDB connected successfully.");
 
-    await server.start();
-    server.applyMiddleware({ app });
-
     app.listen(port, () => {
-        console.log(`Server running on port ${port}`);
-      });
-    } catch (error) {
-      console.error("Failed to connect to MongoDB", error);
-    }
+      console.log(`Server running on port ${port}`);
+    });
+  } catch (error) {
+    console.error("Failed to connect to MongoDB", error);
+    // Properly handle the error
+    process.exit(1);
   }
+}
 
 run().catch(console.dir);
-
-startServer();
