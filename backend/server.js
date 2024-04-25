@@ -1,4 +1,5 @@
 const express = require('express');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const { ApolloServer } = require('apollo-server-express');
 const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
@@ -7,6 +8,19 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors());
+const port = process.env.PORT || 4000;
+
+const uri = "mongodb+srv://a-r3n:81VecrNgi4ccVYbM@cluster0.vfyfoze.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const client = new MongoClient(uri, {
+  serverApi: ServerApiVersion.v1,
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+async function run() {
+  try {
+    await client.connect();
+    console.log("Connected to MongoDB");
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
@@ -22,12 +36,14 @@ const startServer = async () => {
     await server.start();
     server.applyMiddleware({ app });
 
-    app.listen({ port: 4000 }, () =>
-      console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-    );
-  } catch (err) {
-    console.error("Failed to connect to MongoDB", err);
+    app.listen(port, () => {
+        console.log(`Server running on port ${port}`);
+      });
+    } catch (error) {
+      console.error("Failed to connect to MongoDB", error);
+    }
   }
-};
+
+run().catch(console.dir);
 
 startServer();

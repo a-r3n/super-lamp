@@ -31,6 +31,10 @@ body {
     display: none;             /* Initially hide the answer */
   }
   
+  .answer-text.visible {
+    display: block;
+  }  
+
   .button {
     background-color: #007BFF; /* Blue background for buttons */
     color: #ffffff;
