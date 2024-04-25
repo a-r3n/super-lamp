@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../styles/custom.css';  // Ensure the path to your CSS file is correct
 
 const Quiz = () => {
   const [questions, setQuestions] = useState([]);
@@ -34,20 +35,26 @@ const Quiz = () => {
     setQuestions(current =>
       current.map(q => q.id === id ? { ...q, correct: true } : q)
     );
-    setScore(score + 1);
+    setScore(prevScore => prevScore + 1); // Use prevScore for accurate updating
   };
 
   return (
     <div>
-      {questions.map(q => (
-        <div key={q.id}>
-          <p>{q.questionText}</p>
-          {q.showAnswer && <p>{q.answer}</p>}
-          <button onClick={() => handleShowAnswer(q.id)}>Show Answer</button>
-          <button onClick={() => handleCorrect(q.id)}>Correct</button>
-        </div>
+      <h1>Weekly News Quiz</h1>
+      <p> Catch up on the news of the week with the Equity Mates weekend quiz </p>
+      {questions.map(question => (
+        <Card className="question-card" key={question.id}>
+          <p className="question-text">{question.questionText}</p>
+          {question.showAnswer && <p className="answer-text">{question.answer}</p>}
+          <Button className="button" onClick={() => handleShowAnswer(question.id)}>
+            Show Answer
+          </Button>
+          <Button className="button" onClick={() => handleCorrect(question.id)}>
+            Correct
+          </Button>
+        </Card>
       ))}
-      <div>Score: {score}</div>
+      <div className="score">Score: {score}</div>
     </div>
   );
 };

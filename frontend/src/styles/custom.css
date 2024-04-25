@@ -1,0 +1,53 @@
+/* src/styles/custom.css */
+body {
+    background-color: #fff; /* White background */
+    color: #333;            /* Dark gray text */
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;          /* Padding to prevent content from touching the edges */
+  }
+  
+  h1 {
+    color: #333;            /* Dark color for headings */
+    text-align: center;     /* Center align the main heading */
+  }
+  
+  .question-card {
+    background-color: #f9f9f9; /* Light gray background for questions */
+    border: 1px solid #ddd;    /* Border to separate questions */
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;       /* Space between question cards */
+  }
+  
+  .question-text {
+    font-size: 16px;           /* Larger text for question */
+    color: #333;
+  }
+  
+  .answer-text {
+    font-size: 14px;
+    color: #666;               /* Slightly lighter color for answers */
+    display: none;             /* Initially hide the answer */
+  }
+  
+  .button {
+    background-color: #007BFF; /* Blue background for buttons */
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .score {
+    font-size: 20px;
+    color: #333;
+    text-align: center;         /* Centering score display */
+  }
+  
