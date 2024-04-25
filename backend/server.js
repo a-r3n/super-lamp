@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const { ApolloServer } = require('apollo-server-express');
@@ -10,7 +12,7 @@ const app = express();
 app.use(cors());
 const port = process.env.PORT || 4000;
 
-const uri = "mongodb+srv://a-r3n:81VecrNgi4ccVYbM@cluster0.vfyfoze.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = process.env.DB_URI;
 const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1,
   useNewUrlParser: true,
