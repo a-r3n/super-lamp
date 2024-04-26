@@ -7,9 +7,10 @@ const Quiz = () => {
   const [score, setScore] = useState(0);
 
   useEffect(() => {
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000'; // Fallback to localhost if the env variable is not set
     const fetchQuestions = async () => {
       try {
-        const response = await axios.post('http://localhost:4000/graphql', {
+        const response = await axios.post(`${apiUrl}/graphql`, {
           query: `{ getQuestions { id questionText answer } }`
         }, {
           headers: {
@@ -34,26 +35,22 @@ const Quiz = () => {
     setQuestions(currentQuestions =>
       currentQuestions.map(question => {
         if (question.id === id) {
-          console.log("Toggling showAnswer for question:", id, "Current state:", question.showAnswer);
           return {...question, showAnswer: !question.showAnswer};
         }
         return question;
       })
     );
   };
- 
 
   const handleCorrect = (id) => {
     setQuestions(currentQuestions =>
       currentQuestions.map(question => {
-        if (question.id === id && !question.correct) { // Check if not already marked correct
-          // Update the question to mark as correct
+        if (question.id === id && !question.correct) {
           return {...question, correct: true};
         }
         return question;
       })
     );
-    // Check if the question is being marked correct for the first time to update score
     const question = questions.find(q => q.id === id);
     if (question && !question.correct) {
       setScore(prevScore => prevScore + 1);
@@ -62,7 +59,7 @@ const Quiz = () => {
 
   return (
     <div>
-    <div className="score">Score: {score}/10 </div>
+      <div className="score">Score: {score}/10</div>
       {questions.map(question => (
         <div className="question-card" key={question.id}>
           <p className="question-text">{question.questionText}</p>
