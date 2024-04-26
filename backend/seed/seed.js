@@ -9,7 +9,8 @@ mongoose.connect(dbURI)
   .catch(err => console.error('MongoDB connection error:', err));
 
 const questions = [
-  { questionText: "Hello Day", answer: "Lets get it" },
+  { questionText: "Hello Day2", answer: "Lets get it" },
+  { questionText: "Hello Day2", answer: "Lets get it" },
   { questionText: "In the 12 months to December 2023, Australia’s inflation rate was 4.1%. In the 12 months to March 2024, has it gone up, gone down or stayed steady?", answer: "Gone down (to 3.6%)" },
   { questionText: "The Government has announced HECS-HELP debt will increase by how much this year?", answer: "4.7%" },
   { questionText: "The shareholders of which Australian fossil fuel company rejected the company’s climate transition action plan at it’s annual general meeting?", answer: "Woodside Energy (ASX: WDS)" },
