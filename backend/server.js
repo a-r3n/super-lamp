@@ -29,7 +29,7 @@ async function run() {
     await server.start();
     server.applyMiddleware({ app });
 
-    await mongoose.connect('mongodb://localhost:27017/quizdb', {
+    await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: 5000
