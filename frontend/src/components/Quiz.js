@@ -59,10 +59,14 @@ const Quiz = () => {
 
   return (
     <div>
-      <div className="score">Score: {score}/10</div>
+      <div className="header">
+        <h1>Weekly News Quiz</h1>
+        <div className="score">Score: {score}/10</div>
+      </div>
+      <div className="content">
       {questions.map(question => (
         <div className="question-card" key={question.id}>
-          <p className="question-text">{question.questionText}</p>
+          <p className="question-text" dangerouslySetInnerHTML={{ __html: question.questionText }}></p>
           <p className={`answer-text ${question.showAnswer ? 'visible' : ''}`}>{question.answer}</p>
           <button className="button" onClick={() => handleShowAnswer(question.id)}>
             Show Answer
@@ -73,6 +77,7 @@ const Quiz = () => {
         </div>
       ))}
     </div>
+  </div>
   );
 };
 
