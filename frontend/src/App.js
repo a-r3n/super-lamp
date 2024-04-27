@@ -1,5 +1,6 @@
 import React from 'react';
 import Quiz from './components/Quiz';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -8,7 +9,10 @@ function App() {
       <br></br>
       <br></br>
       <br></br>
-      <Quiz />
+      <main>
+        <Quiz />
+      </main>
+      <Footer />
     </div>
   );
 }

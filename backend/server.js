@@ -44,3 +44,17 @@ startServer().catch(error => {
     console.error("Failed to connect to MongoDB", error);
     process.exit(1);
 });
+
+// Manage email submission in Footer
+app.post('/submit-email', async (req, res) => {
+  const { email } = req.body;
+  try {
+      // Assuming you have a mongoose model `Subscriber`
+      const subscriber = new Subscriber({ email });
+      await subscriber.save();
+      res.send({ message: 'Email successfully added!' });
+  } catch (error) {
+      console.error('Failed to save email:', error);
+      res.status(500).send({ message: 'Failed to save email' });
+  }
+});
