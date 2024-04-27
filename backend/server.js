@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const express = require('express');
-const { MongoClient, ServerApiVersion } = require('mongodb');
 const { ApolloServer } = require('apollo-server-express');
 const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
@@ -12,38 +11,36 @@ const app = express();
 app.use(cors());
 const port = process.env.PORT || 4000;
 
+// MongoDB URI from environment variable
 const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri, {
-  serverApi: ServerApiVersion.v1,
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
 
-async function run() {
-  try {
-    await client.connect();
-    console.log("Connected to MongoDB");
-
+// Start server function
+async function startServer() {
     const server = new ApolloServer({ typeDefs, resolvers });
 
+    // Starting the Apollo server
     await server.start();
+    
+    // Apply GraphQL middleware
     server.applyMiddleware({ app });
 
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 5000
+    // Connect to MongoDB
+    await mongoose.connect(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 5000
     });
+    
     console.log("MongoDB connected successfully.");
 
+    // Start Express server
     app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
+        console.log(`Server running on port ${port}`);
     });
-  } catch (error) {
-    console.error("Failed to connect to MongoDB", error);
-    // Properly handle the error
-    process.exit(1);
-  }
 }
 
-run().catch(console.dir);
+// Catching potential errors
+startServer().catch(error => {
+    console.error("Failed to connect to MongoDB", error);
+    process.exit(1);
+});
