@@ -7,9 +7,12 @@ const resolvers = require('./graphql/resolvers');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const authRoutes = require('./routes/auth'); 
 
 const app = express();
 app.use(cors());
+app.use(express.json());
+app.use('/api/auth', authRoutes);
 
 const port = process.env.PORT || 4000;
 const uri = process.env.MONGODB_URI;
