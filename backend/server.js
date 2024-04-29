@@ -7,7 +7,7 @@ const resolvers = require('./graphql/resolvers');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-const authRoutes = require('./routes/auth'); 
+const authRoutes = require('./routes/auth');
 
 const app = express();
 app.use(cors());
@@ -29,6 +29,20 @@ async function startServer() {
 
     console.log("MongoDB connected successfully.");
 
+    // Handle email submission
+    app.post('/submit-email', async (req, res) => {
+        const { email } = req.body;
+        try {
+            // Assuming you have a mongoose model `Subscriber`
+            const subscriber = new Subscriber({ email });
+            await subscriber.save();
+            res.send({ message: 'Email successfully added!' });
+        } catch (error) {
+            console.error('Failed to save email:', error);
+            res.status(500).send({ message: 'Failed to save email' });
+        }
+    });
+
     // Serve static files from the React app
     app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
@@ -46,18 +60,4 @@ async function startServer() {
 startServer().catch(error => {
     console.error("Failed to connect to MongoDB", error);
     process.exit(1);
-});
-
-// Manage email submission in Footer
-app.post('/submit-email', async (req, res) => {
-  const { email } = req.body;
-  try {
-      // Assuming you have a mongoose model `Subscriber`
-      const subscriber = new Subscriber({ email });
-      await subscriber.save();
-      res.send({ message: 'Email successfully added!' });
-  } catch (error) {
-      console.error('Failed to save email:', error);
-      res.status(500).send({ message: 'Failed to save email' });
-  }
 });
