@@ -10,11 +10,13 @@ const Quiz = () => {
     const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000'; // Fallback to localhost if the env variable is not set
     const fetchQuestions = async () => {
       try {
+        const token = localStorage.getItem('token'); // Retrieve the token from local storage
         const response = await axios.post(`${apiUrl}/graphql`, {
           query: `{ getQuestions { id questionText answer } }`
         }, {
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`  // Include the token in the authorization header
           }
         });
         const initialQuestions = response.data.data.getQuestions.map(question => ({
