@@ -62,7 +62,7 @@ const Quiz = () => {
 
   return (
     <div>
-      <Header />
+      <Header score={score} />  
       <div className="content">
         {questions.map(question => (
           <div className="question-card" key={question.id}>

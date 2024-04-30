@@ -31,7 +31,7 @@ const LoginModal = ({ isOpen, onClose }) => {
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
         <button type="submit">Login</button>
         <button onClick={onClose}>Cancel</button>
-        {error && <p>{error}</p>}  // Display error if present
+        {error && <p>{error}</p>}  
       </form>
     </Modal>
   );
