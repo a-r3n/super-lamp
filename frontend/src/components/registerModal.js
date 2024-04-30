@@ -11,14 +11,18 @@ const RegisterModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState('');  // State to handle error messages
   const navigate = useNavigate();  // Hook for navigation
 
+  // Define the base URL for API calls
+  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';  // Use the environment variable or default to localhost:4000
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/register', { username, password });
-      navigate('/login'); // Redirect to login on successful registration
+      const response = await axios.post(`${apiUrl}/api/auth/register`, { username, password });
+      localStorage.setItem('token', response.data.token); // Store the token if needed
+      navigate('/'); // Redirect to home on successful registration
       onClose(); // Close the modal on success
     } catch (error) {
-      setError(error.response.data); // Set error message from response
+      setError(error.response && error.response.data ? error.response.data : "Registration failed");
     }
   };
 
@@ -30,7 +34,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
         <button type="submit">Register</button>
         <button onClick={onClose}>Cancel</button>
-        {error && <p>{error}</p>} 
+        {error && <p>{error}</p>}
       </form>
     </Modal>
   );

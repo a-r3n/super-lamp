@@ -11,15 +11,18 @@ const LoginModal = ({ isOpen, onClose }) => {
   const [error, setError] = useState('');  // State to handle error messages
   const navigate = useNavigate();  // Hook for navigation
 
+  // Define the base URL for API calls
+  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';  // Use the environment variable or default to localhost:4000
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/login', { username, password });
+      const response = await axios.post(`${apiUrl}/api/auth/login`, { username, password });
       localStorage.setItem('token', response.data.token); // Store the token
       navigate('/'); // Redirect to home on successful login
       onClose(); // Close the modal on success
     } catch (error) {
-      setError(error.response.data); // Set error message from response
+      setError(error.response && error.response.data ? error.response.data : "Login failed");
     }
   };
 
