@@ -1,14 +1,12 @@
 import React, { useState, useContext } from 'react';
+import { UserContext } from '../contexts/UserContext';
 import RegisterModal from './registerModal';
 import LoginModal from './loginModal';
-
-// Context or global state that stores user's authentication status and score
-import { UserContext } from '../contexts/UserContext';
 
 const Header = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { isLoggedIn, score, saveScore } = useContext(UserContext);  // Assuming you have a UserContext
+  const { isLoggedIn, score, saveScore, logout } = useContext(UserContext);  
 
   return (
     <div className="header">
@@ -21,9 +19,9 @@ const Header = () => {
         </>
       ) : (
         <>
-          <button onClick={() => {/* logic to handle logout */}}>Logout</button>
-          <div>Score: {score}</div>
+          <button onClick={logout}>Logout</button>
           <button onClick={saveScore}>Save my score</button>
+          <div>Score: {score}</div>
         </>
       )}
       <RegisterModal isOpen={showRegisterModal} onClose={() => setShowRegisterModal(false)} />
