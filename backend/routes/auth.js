@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); // Adjust the path as necessary
-const { handlePayment } = require('./stripeController');
+const { handlePayment } = require('../controllers/stripeController');
 const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';  // Fallback secret

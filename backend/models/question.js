@@ -8,6 +8,10 @@ const questionSchema = new mongoose.Schema({
   answer: {
     type: String,
     required: true
+  },
+  hint: {
+    type: String,  
+    required: true
   }
 });
 
