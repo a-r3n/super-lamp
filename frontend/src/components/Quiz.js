@@ -50,6 +50,7 @@ const Quiz = () => {
   };
 
   const handleGetHint = (id) => {
+    console.log("Hint button clicked, question ID:", id);
     setCurrentQuestionId(id);
     setShowPaymentModal(true);
   };
@@ -84,5 +85,6 @@ const Quiz = () => {
     </div>
   );
 };
+
 
 export default Quiz;
