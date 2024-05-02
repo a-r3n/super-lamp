@@ -1,62 +1,72 @@
+// frontend/src/components/Quiz.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import PaymentModal from './paymentModal';
 import '../styles/custom.css';
 
 const Quiz = () => {
   const [questions, setQuestions] = useState([]);
   const [score, setScore] = useState(0);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [currentQuestionId, setCurrentQuestionId] = useState(null);
 
   useEffect(() => {
-    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000'; // Fallback to localhost if the env variable is not set
-    const fetchQuestions = async () => {
-      try {
-        const token = localStorage.getItem('token'); // Retrieve the token from local storage
-        const response = await axios.post(`${apiUrl}/graphql`, {
-          query: `{ getQuestions { id questionText answer } }`
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`  // Include the token in the authorization header
-          }
-        });
-        const initialQuestions = response.data.data.getQuestions.map(question => ({
-          ...question,
-          showAnswer: false,
-          correct: false  // Initialize correct state
-        }));
-        setQuestions(initialQuestions);
-      } catch (error) {
-        console.error('Error fetching questions:', error);
-      }
-    };
-
     fetchQuestions();
   }, []);
 
-  const handleShowAnswer = (id) => {
-    setQuestions(currentQuestions =>
-      currentQuestions.map(question => {
-        if (question.id === id) {
-          return {...question, showAnswer: !question.showAnswer};
+  const fetchQuestions = async () => {
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.post(`${apiUrl}/graphql`, {
+        query: `{ getQuestions { id questionText answer hint } }`
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         }
-        return question;
-      })
-    );
+      });
+      const initialQuestions = response.data.data.getQuestions.map(q => ({
+        ...q,
+        showAnswer: false,
+        correct: false,
+        showHint: false
+      }));
+      setQuestions(initialQuestions);
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+    }
+  };
+
+  const handleShowAnswer = (id) => {
+    toggleQuestionProperty(id, 'showAnswer');
   };
 
   const handleCorrect = (id) => {
-    setQuestions(currentQuestions =>
-      currentQuestions.map(question => {
-        if (question.id === id && !question.correct) {
-          return {...question, correct: true};
-        }
-        return question;
-      })
-    );
+    toggleQuestionProperty(id, 'correct');
     const question = questions.find(q => q.id === id);
     if (question && !question.correct) {
-      setScore(prevScore => prevScore + 1);
+      setScore(score + 1);
     }
+  };
+
+  const handleGetHint = (id) => {
+    setCurrentQuestionId(id);
+    setShowPaymentModal(true);
+  };
+
+  const handlePaymentSuccess = () => {
+    setShowPaymentModal(false);
+    toggleQuestionProperty(currentQuestionId, 'showHint');
+  };
+
+  const toggleQuestionProperty = (id, property) => {
+    setQuestions(questions.map(q => {
+      if (q.id === id) {
+        return { ...q, [property]: !q[property] };
+      }
+      return q;
+    }));
   };
 
   return (
@@ -65,14 +75,13 @@ const Quiz = () => {
         <div className="question-card" key={question.id}>
           <p className="question-text" dangerouslySetInnerHTML={{ __html: question.questionText }}></p>
           <p className={`answer-text ${question.showAnswer ? 'visible' : ''}`}>{question.answer}</p>
-          <button className="button" onClick={() => handleShowAnswer(question.id)}>
-            Show Answer
-          </button>
-          <button className="button" onClick={() => handleCorrect(question.id)} disabled={question.correct}>
-            Correct
-          </button>
+          {question.showHint && <p className="hint-text">{question.hint}</p>}
+          <button className="button" onClick={() => handleShowAnswer(question.id)}>Show Answer</button>
+          <button className="button" onClick={() => handleCorrect(question.id)} disabled={question.correct}>Correct</button>
+          <button className="button" onClick={() => handleGetHint(question.id)}>Get a Hint</button>
         </div>
       ))}
+      <PaymentModal isOpen={showPaymentModal} onClose={() => setShowPaymentModal(false)} onSuccess={handlePaymentSuccess} />
     </div>
   );
 };

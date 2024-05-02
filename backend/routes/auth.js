@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User'); // Adjust the path as necessary
+const { handlePayment } = require('./stripeController');
 const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';  // Fallback secret
@@ -47,5 +48,8 @@ router.post('/register', async (req, res) => {
       res.status(500).send("Error logging in.");
     }
   });
+
+  router.post('/create-payment-intent', handlePayment);
+
 
 module.exports = router;
