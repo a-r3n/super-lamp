@@ -50,11 +50,11 @@ const Quiz = () => {
   };
 
   const handleGetHint = (id) => {
-    console.log("Hint button clicked, question ID:", id);
-    setCurrentQuestionId(id);
-    setShowPaymentModal(true);
+    setCurrentQuestionId(id); // Store the current question ID to know which hint to show upon return
+    // Redirect to Stripe payment link
+    window.location.href = "https://buy.stripe.com/bIYdTqf1C9d59xecMM";
   };
-
+  
   const handlePaymentSuccess = () => {
     setShowPaymentModal(false);
     toggleQuestionProperty(currentQuestionId, 'showHint');
