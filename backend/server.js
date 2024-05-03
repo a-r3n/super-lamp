@@ -7,15 +7,15 @@ const resolvers = require('./graphql/resolvers');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const authRoutes = require('./routes/auth');
 const stripeRoutes = require('./routes/stripeRoutes'); 
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
-app.use('/api/stripe', stripeRoutes); 
+app.use('/api/stripe', stripeRoutes);
 
 const port = process.env.PORT || 4000;
 const uri = process.env.MONGODB_URI;
@@ -46,6 +46,32 @@ async function startServer() {
         }
     });
 
+    // Stripe checkout session creation endpoint
+    app.post('/create-checkout-session', async (req, res) => {
+        try {
+            const session = await stripe.checkout.sessions.create({
+                payment_method_types: ['card'],
+                line_items: [{
+                    price_data: {
+                        currency: 'usd',
+                        product_data: {
+                            name: 'Get a Hint',
+                        },
+                        unit_amount: 100, // in cents
+                    },
+                    quantity: 1,
+                }],
+                mode: 'payment',
+                success_url: `${req.headers.origin}/return?session_id={CHECKOUT_SESSION_ID}`,
+                cancel_url: `${req.headers.origin}/cancel`,
+            });
+            res.json({ sessionId: session.id });
+        } catch (err) {
+            console.error("Error creating checkout session", err);
+            res.status(500).send("Failed to create session: " + err.message);
+        }
+    });
+
     // Serve static files from the React app
     app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 
@@ -64,32 +90,3 @@ startServer().catch(error => {
     console.error("Failed to connect to MongoDB", error);
     process.exit(1);
 });
-
-
-app.post('/create-checkout-session', async (req, res) => {
-    try {
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: [{
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'Get a Hint',
-            },
-            unit_amount: 100, // in cents
-          },
-          quantity: 1,
-        }],
-        mode: 'payment',
-        success_url: `${req.headers.origin}/return?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${req.headers.origin}/cancel`,
-      });
-      res.json({ sessionId: session.id });
-    } catch (err) {
-      console.error("Error creating checkout session", err);
-      res.status(500).send("Internal Server Error");
-    }
-  });
-  
-  const PORT = process.env.PORT || 4242;
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
