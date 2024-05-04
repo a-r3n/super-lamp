@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User'); 
 const Question = require('../models/question'); 
 const router = express.Router();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';  // Fallback secret
 
@@ -71,6 +73,21 @@ router.get('/questions', async (req, res) => {
   } catch (error) {
     console.error('Failed to fetch questions:', error);
     res.status(500).send("Error fetching questions");
+  }
+});
+
+router.get('/check-subscription/:userId', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
+    res.json({ subscriptionStatus: subscription.status });
+  } catch (error) {
+    console.error('Failed to retrieve subscription:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 

@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 export const UserContext = createContext();
@@ -6,12 +6,28 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [userId, setUserId] = useState(localStorage.getItem('userId') || null);
   const [score, setScore] = useState(0);
 
-  const login = (token, subscribedStatus) => {
+  useEffect(() => {
+    const checkSubscriptionStatus = async () => {
+      if (!isLoggedIn || !userId) return;
+      try {
+        const response = await axios.get(`/api/check-subscription/${userId}`);
+        setIsSubscribed(response.data.subscriptionStatus === 'active');
+      } catch (error) {
+        console.error('Error checking subscription status:', error);
+      }
+    };
+
+    checkSubscriptionStatus();
+  }, [isLoggedIn, userId]);
+
+  const login = (token, userId) => {
     localStorage.setItem('token', token);
+    localStorage.setItem('userId', userId);
     setIsLoggedIn(true);
-    setIsSubscribed(subscribedStatus);  // Now this needs to be passed when login is called
+    setUserId(userId); // Set user ID upon login
   };
 
   const subscribe = () => {
@@ -21,8 +37,10 @@ export const UserProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     setIsLoggedIn(false);
     setIsSubscribed(false);
+    setUserId(null);
     setScore(0); // Reset score on logout
   };
 
@@ -44,7 +62,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ isLoggedIn, isSubscribed, score, setScore, login, logout, subscribe, saveScore, incrementScore }}>
+    <UserContext.Provider value={{ isLoggedIn, userId, isSubscribed, score, setScore, login, logout, subscribe, saveScore, incrementScore }}>
       {children}
     </UserContext.Provider>
   );

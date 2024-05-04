@@ -1,38 +1,35 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import axios from 'axios';
-import { UserContext } from '../contexts/UserContext';  // Import UserContext
+import { UserContext } from '../contexts/UserContext';
 import '../styles/custom.css';
 
 const Quiz = () => {
   const [questions, setQuestions] = useState([]);
-  const { incrementScore } = useContext(UserContext);  // Use incrementScore from UserContext
+  const { incrementScore, isSubscribed } = useContext(UserContext);  // Use incrementScore from UserContext
 
   const fetchQuestions = useCallback(async () => {
     const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(`${apiUrl}/graphql`, {
-        query: `{ getQuestions { id questionText answer } }`
+        query: `{ getQuestions { id questionText answer isSubscriberOnly } }`
       }, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
-      const initialQuestions = response.data.data.getQuestions.map(q => ({
-        ...q,
-        showAnswer: false,
-        correct: false,
-      }));
-      setQuestions(initialQuestions);
-    } catch ( error ) {
+      const fetchedQuestions = response.data.data.getQuestions;
+      const visibleQuestions = fetchedQuestions.filter(q => !q.isSubscriberOnly || isSubscribed);
+      setQuestions(visibleQuestions);
+    } catch (error) {
       console.error('Error fetching questions:', error);
     }
-  }, []); // include any props/state that might cause this to change
+  }, [isSubscribed]);  // Include isSubscribed as a dependency
 
   useEffect(() => {
     fetchQuestions();
-  }, [fetchQuestions]); // dependency on fetchQuestions now
+  }, [fetchQuestions]); // Include fetchQuestions as a dependency
 
   const handleShowAnswer = (id) => {
     toggleQuestionProperty(id, 'showAnswer');
