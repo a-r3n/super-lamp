@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import axios from 'axios';  // Import axios to make HTTP requests
+import axios from 'axios';
 
 export const UserContext = createContext();
 
@@ -15,6 +15,7 @@ export const UserProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
+    setScore(0); // Reset score on logout
   };
 
   const saveScore = async () => {
@@ -30,8 +31,12 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const incrementScore = () => {
+    setScore(score + 1); // Increment score function
+  };
+
   return (
-    <UserContext.Provider value={{ isLoggedIn, score, setScore, login, logout, saveScore }}>
+    <UserContext.Provider value={{ isLoggedIn, score, setScore, login, logout, saveScore, incrementScore }}>
       {children}
     </UserContext.Provider>
   );

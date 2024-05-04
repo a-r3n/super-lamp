@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { UserContext } from '../contexts/UserContext';  // Import UserContext
 import '../styles/custom.css';
 
 const Quiz = () => {
   const [questions, setQuestions] = useState([]);
-  const [score, setScore] = useState(0);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [currentQuestionId, setCurrentQuestionId] = useState(null);
+  const { incrementScore } = useContext(UserContext);  // Use incrementScore from UserContext
 
   useEffect(() => {
     fetchQuestions();
@@ -40,10 +39,10 @@ const Quiz = () => {
   };
 
   const handleCorrect = (id) => {
-    toggleQuestionProperty(id, 'correct');
     const question = questions.find(q => q.id === id);
     if (question && !question.correct) {
-      setScore(score + 1);
+      incrementScore();  // Use incrementScore to update the score globally
+      toggleQuestionProperty(id, 'correct');
     }
   };
 
@@ -69,6 +68,5 @@ const Quiz = () => {
     </div>
   );
 };
-
 
 export default Quiz;
