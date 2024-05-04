@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import PaymentModal from './paymentModal';
 import '../styles/custom.css';
 
 const Quiz = () => {
@@ -18,7 +17,7 @@ const Quiz = () => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(`${apiUrl}/graphql`, {
-        query: `{ getQuestions { id questionText answer hint } }`
+        query: `{ getQuestions { id questionText answer } }`
       }, {
         headers: {
           'Content-Type': 'application/json',
@@ -29,7 +28,6 @@ const Quiz = () => {
         ...q,
         showAnswer: false,
         correct: false,
-        showHint: false
       }));
       setQuestions(initialQuestions);
     } catch (error) {
@@ -49,17 +47,6 @@ const Quiz = () => {
     }
   };
 
-  const handleGetHint = (id) => {
-    setCurrentQuestionId(id); // Store the current question ID to know which hint to show upon return
-    // Redirect to Stripe payment link
-    window.location.href = "https://buy.stripe.com/bIYdTqf1C9d59xecMM";
-  };
-  
-  const handlePaymentSuccess = () => {
-    setShowPaymentModal(false);
-    toggleQuestionProperty(currentQuestionId, 'showHint');
-  };
-
   const toggleQuestionProperty = (id, property) => {
     setQuestions(questions.map(q => {
       if (q.id === id) {
@@ -75,13 +62,10 @@ const Quiz = () => {
         <div className="question-card" key={question.id}>
           <p className="question-text" dangerouslySetInnerHTML={{ __html: question.questionText }}></p>
           <p className={`answer-text ${question.showAnswer ? 'visible' : ''}`}>{question.answer}</p>
-          {question.showHint && <p className="hint-text">{question.hint}</p>}
           <button className="button" onClick={() => handleShowAnswer(question.id)}>Show Answer</button>
           <button className="button" onClick={() => handleCorrect(question.id)} disabled={question.correct}>Correct</button>
-          <button className="button" onClick={() => handleGetHint(question.id)}>Get a Hint</button>
         </div>
       ))}
-      <PaymentModal isOpen={showPaymentModal} onClose={() => setShowPaymentModal(false)} onSuccess={handlePaymentSuccess} />
     </div>
   );
 };

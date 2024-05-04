@@ -13,7 +13,6 @@ const typeDefs = gql`
     id: ID!
     questionText: String!
     answer: String!
-    hint: String!
   }
 `;
 

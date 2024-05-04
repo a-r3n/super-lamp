@@ -5,8 +5,8 @@ const resolvers = {
     getQuestions: async () => await Question.find({}),
   },
   Mutation: {
-    addQuestion: async (_, { questionText, answer, hint }) => {
-      const newQuestion = new Question({ questionText, answer, hint });
+    addQuestion: async (_, { questionText, answer }) => {
+      const newQuestion = new Question({ questionText, answer });
       await newQuestion.save();
       return newQuestion;
     },
