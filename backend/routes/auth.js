@@ -1,7 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Adjust the path as necessary
+const User = require('../models/User'); 
+const Question = require('../models/question'); 
 const router = express.Router();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';  // Fallback secret
@@ -48,5 +49,29 @@ router.post('/register', async (req, res) => {
     }
   });
 
+router.post('/subscribe', async (req, res) => {
+  const { userId } = req.body; // Make sure to authenticate and validate
+
+  try {
+      const user = await User.findById(userId);
+      user.isSubscribed = true;
+      await user.save();
+      res.send({ success: true, message: "Subscription updated successfully." });
+  } catch (error) {
+      res.status(500).send({ success: false, message: "Failed to update subscription." });
+  }
+});
+
+// Fetch questions based on subscription status
+router.get('/questions', async (req, res) => {
+  try {
+    const isSubscribed = req.query.isSubscribed === 'true'; // Example to get subscription status from query
+    const questions = await Question.find({ isSubscriberOnly: { $lte: isSubscribed } }); // Fetches all questions for non-subscribers and all for subscribers
+    res.json({ questions });
+  } catch (error) {
+    console.error('Failed to fetch questions:', error);
+    res.status(500).send("Error fetching questions");
+  }
+});
 
 module.exports = router;

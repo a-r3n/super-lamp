@@ -8,6 +8,10 @@ const questionSchema = new mongoose.Schema({
   answer: {
     type: String,
     required: true
+  },
+  isSubscriberOnly: {
+    type: Boolean,
+    default: false  // Assume questions are available to all by default
   }
 });
 

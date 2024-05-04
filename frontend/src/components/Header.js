@@ -6,7 +6,12 @@ import LoginModal from './loginModal';
 const Header = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { isLoggedIn, score, saveScore, logout } = useContext(UserContext);  
+  const { isLoggedIn, isSubscribed, score, saveScore, logout, subscribe } = useContext(UserContext);
+
+  const handleSubscribe = () => {
+    window.location.href = "https://buy.stripe.com/fZe9Da6v674X9xe145"; // Assume subscription logic is here
+    subscribe(); // Call this after ensuring the subscription payment is successful
+  };
 
   return (
     <div className="header">
@@ -19,9 +24,21 @@ const Header = () => {
         </>
       ) : (
         <>
-          <button onClick={logout}>Logout</button>
-          <button onClick={saveScore}>Save my score</button>
-          <div>Score: {score}</div>
+          {isSubscribed ? (
+            <>
+              <button onClick={logout}>Logout</button>
+              <button onClick={saveScore}>Save my score</button>
+              <div>Score: {score}</div>
+              <p>Thank you for subscribing</p>
+            </>
+          ) : (
+            <>
+              <button onClick={logout}>Logout</button>
+              <button onClick={handleSubscribe}>Subscribe</button>
+              <button onClick={saveScore}>Save my score</button>
+              <div>Score: {score}</div>
+            </>
+          )}
         </>
       )}
       <RegisterModal isOpen={showRegisterModal} onClose={() => setShowRegisterModal(false)} />

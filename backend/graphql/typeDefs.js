@@ -6,13 +6,14 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    addQuestion(questionText: String!, answer: String!, hint: String!): Question
+    addQuestion(questionText: String!, answer: String!, isSubscriberOnly: Boolean!): Question
   }
 
   type Question {
     id: ID!
     questionText: String!
     answer: String!
+    isSubscriberOnly: Boolean!
   }
 `;
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import axios from 'axios';
 import { UserContext } from '../contexts/UserContext';  // Import UserContext
 import '../styles/custom.css';
@@ -7,11 +7,7 @@ const Quiz = () => {
   const [questions, setQuestions] = useState([]);
   const { incrementScore } = useContext(UserContext);  // Use incrementScore from UserContext
 
-  useEffect(() => {
-    fetchQuestions();
-  }, []);
-
-  const fetchQuestions = async () => {
+  const fetchQuestions = useCallback(async () => {
     const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000';
     try {
       const token = localStorage.getItem('token');
@@ -29,10 +25,14 @@ const Quiz = () => {
         correct: false,
       }));
       setQuestions(initialQuestions);
-    } catch (error) {
+    } catch ( error ) {
       console.error('Error fetching questions:', error);
     }
-  };
+  }, []); // include any props/state that might cause this to change
+
+  useEffect(() => {
+    fetchQuestions();
+  }, [fetchQuestions]); // dependency on fetchQuestions now
 
   const handleShowAnswer = (id) => {
     toggleQuestionProperty(id, 'showAnswer');
@@ -41,7 +41,7 @@ const Quiz = () => {
   const handleCorrect = (id) => {
     const question = questions.find(q => q.id === id);
     if (question && !question.correct) {
-      incrementScore();  // Use incrementScore to update the score globally
+      incrementScore();
       toggleQuestionProperty(id, 'correct');
     }
   };
