@@ -2,26 +2,26 @@ const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const User = require('../models/User');  // Make sure the path to your User model is correct
+const User = require('../models/User');
 
 // Middleware to handle raw bodies only on the webhook route
 const rawBodyBuffer = (req, res, buf, encoding) => {
-    if (buf && buf.length) {
-        req.rawBody = buf.toString(encoding || 'utf8');
-    }
-  };
+  if (buf && buf.length) {
+    req.rawBody = buf.toString(encoding || 'utf8');
+  }
+};
 
-  router.all('/webhook', (req, res, next) => {
-    if (req.method !== 'POST') {
-        return res.status(405).send('Method Not Allowed');
-    }
-    next();
+router.all('/webhook', (req, res, next) => {
+  if (req.method !== 'POST') {
+    return res.status(405).send('Method Not Allowed');
+  }
+  next();
 });
 
-  router.post('/webhook', bodyParser.raw({ type: 'application/json', verify: rawBodyBuffer }), async (req, res) => {
-    console.log("Received webhook with raw body:", req.rawBody);  // Log the raw body
-    const sig = req.headers['stripe-signature'];
-  
+router.post('/webhook', bodyParser.raw({ type: 'application/json', verify: rawBodyBuffer }), async (req, res) => {
+  console.log("Received webhook with raw body:", req.rawBody);
+  const sig = req.headers['stripe-signature'];
+
   let event;
 
   try {
@@ -32,40 +32,51 @@ const rawBodyBuffer = (req, res, buf, encoding) => {
   }
 
   // Handle the event
-  switch (event.type) {
-    case 'checkout.session.completed':
-      const session = event.data.object;
-      // Perform operations after checkout session completion if needed
-  // If the session includes a subscription ID, use it to update user records
-      if (session.subscription) {
-        const subscriptionId = session.subscription;
-        const customer = session.customer;
-        const user = await User.findOne({ stripeCustomerId: customer });
-    if (user) {
-      user.isSubscribed = true;  // Assuming completion means active subscription
-      await user.save();
+  try {
+    switch (event.type) {
+      case 'checkout.session.completed':
+        const session = event.data.object;
+        // Check if username metadata exists
+        if (session.metadata && session.metadata.username) {
+          const username = session.metadata.username;
+          const user = await User.findOne({ username: username });
+          if (user) {
+            user.isSubscribed = true;  // Assuming session completion means active subscription
+            user.stripeCustomerId = session.customer;  // Update Stripe customer ID
+            await user.save();
+            console.log(`Updated user ${username} with subscription status and customer ID.`);
+          } else {
+            console.log(`No user found with username: ${username}`);
+          }
+        } else {
+          console.log('Username metadata not found in the session.');
+        }
+        break;
+      case 'customer.subscription.created':
+      case 'customer.subscription.updated':
+      case 'customer.subscription.deleted':
+        const subscription = event.data.object;
+        if (subscription.metadata && subscription.metadata.username) {
+          const username = subscription.metadata.username;
+          const user = await User.findOne({ username: username });
+          if (user) {
+            user.isSubscribed = subscription.status === 'active';
+            await user.save();
+            console.log(`Subscription status updated for ${username}`);
+          } else {
+            console.log(`No user found with username: ${username}`);
+          }
+        } else {
+          console.log('Username metadata not found in the subscription.');
+        }
+        break;
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+        break;
     }
-  }
-  break;
-
-
-    case 'customer.subscription.created':
-    case 'customer.subscription.updated':
-    case 'customer.subscription.deleted':
-      const subscription = event.data.object;
-      const customerId = subscription.customer;
-      const isActive = subscription.status === 'active';
-
-      // Find user by Stripe customer ID and update their subscription status
-      const user = await User.findOne({ stripeCustomerId: customerId });
-      if (user) {
-        user.isSubscribed = isActive;
-        await user.save();
-      }
-      break;
-    default:
-      console.log(`Unhandled event type ${event.type}`);
-      break;
+  } catch (err) {
+    console.error(`Error handling webhook event: ${err}`);
+    res.status(500).send('Internal Server Error');
   }
 
   // Return a response to acknowledge receipt of the event
