@@ -52,18 +52,15 @@ router.post('/webhook', bodyParser.raw({ type: 'application/json', verify: rawBo
         case 'customer.subscription.created':
         case 'customer.subscription.updated':
         case 'customer.subscription.deleted':
-            const subscription = event.data.object;
-            // Get the customer details from Stripe to retrieve the email
-            const customerDetail = await stripe.customers.retrieve(subscription.customer);
-            if (customerDetail.email) {
-                const user = await User.findOne({ email: customerDetail.email });
+            if (event.data.object.customer_email) {
+                const user = await User.findOne({ email: event.data.object.customer_email });
                 if (user) {
-                    user.isSubscribed = subscription.status === 'active';
-                    user.stripeCustomerId = subscription.customer; // Ensure customer ID is current
+                    user.isSubscribed = event.data.object.status === 'active';
+                    user.stripeCustomerId = event.data.object.customer; // Ensure customer ID is current
                     await user.save();
-                    console.log(`Updated subscription status for ${user.email} to ${subscription.status}`);
+                    console.log(`Updated subscription status for ${user.email} to ${event.data.object.status}`);
                 } else {
-                    console.log(`No user found with email: ${customerDetail.email}`);
+                    console.log(`No user found with email: ${event.data.object.customer_email}`);
                 }
             }
             break;
