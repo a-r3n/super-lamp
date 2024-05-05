@@ -9,6 +9,8 @@ const cors = require('cors');
 const path = require('path');
 const authRoutes = require('./routes/auth');
 const webhookRoutes = require('./routes/webhook');
+const Subscriber = require('./models/Subscriber');
+
 
 const app = express();
 app.use(cors());
@@ -35,7 +37,6 @@ async function startServer() {
     app.post('/submit-email', express.json(), async (req, res) => {
         const { email } = req.body;
         try {
-            // Assuming you have a mongoose model `Subscriber`
             const subscriber = new Subscriber({ email });
             await subscriber.save();
             res.send({ message: 'Email successfully added!' });

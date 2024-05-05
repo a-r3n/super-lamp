@@ -7,8 +7,9 @@ const Footer = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:4000'; // Default URL in case the env variable is missing
         try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/submit-email`, { email });
+            const response = await axios.post(`${apiUrl}/submit-email`, { email });
             console.log('Email submitted:', response.data.message);
             setEmail('');  // Clear input after submission
         } catch (error) {

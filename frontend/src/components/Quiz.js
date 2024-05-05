@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import axios from 'axios';
 import { UserContext } from '../contexts/UserContext';
 import '../styles/custom.css';
+import heroImage from '../assets/placeholder.png'; 
+
 
 const Quiz = () => {
   const [questions, setQuestions] = useState([]);
@@ -54,6 +56,7 @@ const Quiz = () => {
 
   return (
     <div className="content">
+      <img src={heroImage} alt="Hero" className="hero-image" />
       {questions.map(question => (
         <div className="question-card" key={question.id}>
           <p className="question-text" dangerouslySetInnerHTML={{ __html: question.questionText }}></p>
