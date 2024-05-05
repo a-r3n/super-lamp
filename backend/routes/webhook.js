@@ -1,9 +1,8 @@
 const express = require('express');
+const router = express.Router();
 const bodyParser = require('body-parser');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const User = require('../models/User');  // Make sure the path to your User model is correct
-
-const router = express.Router();
 
 // Middleware to handle raw bodies only on the webhook route
 const rawBodyBuffer = (req, res, buf, encoding) => {
@@ -12,7 +11,7 @@ const rawBodyBuffer = (req, res, buf, encoding) => {
     }
   };
 
-  router.post('/webhook', bodyParser.raw({ type: 'application/json', verify: rawBodyBuffer }), (req, res) => {
+  router.post('/webhook', bodyParser.raw({ type: 'application/json', verify: rawBodyBuffer }), async (req, res) => {
     const sig = req.headers['stripe-signature'];
   
   let event;
