@@ -12,6 +12,7 @@ const rawBodyBuffer = (req, res, buf, encoding) => {
   };
 
   router.post('/webhook', bodyParser.raw({ type: 'application/json', verify: rawBodyBuffer }), async (req, res) => {
+    console.log("Received webhook with raw body:", req.rawBody);  // Log the raw body
     const sig = req.headers['stripe-signature'];
   
   let event;
@@ -19,6 +20,7 @@ const rawBodyBuffer = (req, res, buf, encoding) => {
   try {
     event = stripe.webhooks.constructEvent(req.rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
+    console.error("Webhook signature verification failed", err);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
