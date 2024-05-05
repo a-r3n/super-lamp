@@ -10,6 +10,7 @@ const path = require('path');
 const authRoutes = require('./routes/auth');
 const webhookRoutes = require('./routes/webhook');
 const Subscriber = require('./models/Subscriber');
+const subscriptionRoutes = require('./routes/subscriptionRoutes'); 
 
 
 const app = express();
@@ -17,7 +18,7 @@ app.use(cors());
 // app.use(express.json());
 app.use('/api/auth', express.json(), authRoutes);
 app.use('/api/stripe', webhookRoutes);
-app.use('/api/check-subscription', express.json(), subscriptionRoutes); // Make sure this is correctly defined
+app.use('/api/check-subscription', express.json(), subscriptionRoutes); 
 
 
 const port = process.env.PORT || 4000;
