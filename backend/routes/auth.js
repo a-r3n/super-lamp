@@ -8,13 +8,13 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';  // Fallback secret
 
-const createStripeCustomer = async (user) => {
-  const stripeCustomer = await stripe.customers.create({
-    email: user.email  // Use the email field for creating Stripe customer
-  });
-  user.stripeCustomerId = stripeCustomer.id;
-  await user.save();
-};
+// const createStripeCustomer = async (user) => {
+//   const stripeCustomer = await stripe.customers.create({
+//     email: user.email  // Use the email field for creating Stripe customer
+//   });
+//   user.stripeCustomerId = stripeCustomer.id;
+//   await user.save();
+// };
 
 router.post('/register', async (req, res) => {
   const { email, password } = req.body;
@@ -39,19 +39,16 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).send("Invalid data provided.");
-  }
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).send("Login failed: This user does not exist"); // 404 Not Found
+      return res.status(404).send("Login failed: This user does not exist");
     }
     if (!await bcrypt.compare(password, user.password)) {
       return res.status(401).send("Authentication failed.");
     }
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
-    res.send({ token });
+    res.send({ token, userId: user._id, isSubscribed: user.isSubscribed });  // Include user ID and subscription status in the response
   } catch (error) {
     console.error(error);
     res.status(500).send("Error logging in.");
@@ -117,7 +114,7 @@ router.get('/check-subscription/:userId', async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-  res.json({ subscriptionStatus: user.isSubscribed ? 'active' : 'inactive' });
+  res.json({ isSubscribed: user.isSubscribed });
   } catch (error) {
     console.error('Failed to retrieve subscription:', error);
     res.status(500).json({ error: error.message });

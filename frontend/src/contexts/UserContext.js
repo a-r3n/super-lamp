@@ -9,6 +9,14 @@ export const UserProvider = ({ children }) => {
   const [userId, setUserId] = useState(localStorage.getItem('userId') || null);
   const [score, setScore] = useState(0);
 
+  const login = (token, userId, isSubscribed) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('userId', userId);
+    setIsLoggedIn(true);
+    setUserId(userId); // Set user ID upon login
+    setIsSubscribed(isSubscribed);
+  };
+
   useEffect(() => {
     const checkSubscriptionStatus = async () => {
         if (!isLoggedIn || !userId) return;
@@ -18,7 +26,8 @@ export const UserProvider = ({ children }) => {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            setIsSubscribed(response.data.isSubscribed); // Make sure this matches the response structure
+            console.log('Received subscription status:', response.data.isSubscribed);
+            setIsSubscribed(response.data.isSubscribed); 
         } catch (error) {
             console.error('Error checking subscription status:', error);
         }
@@ -26,13 +35,6 @@ export const UserProvider = ({ children }) => {
 
     checkSubscriptionStatus();
 }, [isLoggedIn, userId]);
-
-  const login = (token, userId) => {
-    localStorage.setItem('token', token);
-    localStorage.setItem('userId', userId);
-    setIsLoggedIn(true);
-    setUserId(userId); // Set user ID upon login
-  };
 
   const subscribe = async () => {
     setIsSubscribed(true);

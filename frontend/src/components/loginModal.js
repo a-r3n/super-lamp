@@ -20,7 +20,7 @@ const LoginModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     try {
       const response = await axios.post(`${apiUrl}/api/auth/login`, { email, password });
-      login(response.data.token);  // Update the login state via context
+      login(response.data.token, response.data.userId, response.data.isSubscribed);  // Update the login state via context
       onClose();  // Close the modal
       navigate('/'); // Redirect to home on successful login
     } catch (error) {

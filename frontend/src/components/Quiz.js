@@ -32,7 +32,7 @@ const Quiz = () => {
 
   useEffect(() => {
     fetchQuestions();
-  }, [fetchQuestions]); // Include fetchQuestions as a dependency
+  }, [fetchQuestions, isSubscribed]); // Include fetchQuestions as a dependency
 
   const handleShowAnswer = (id) => {
     toggleQuestionProperty(id, 'showAnswer');

@@ -8,7 +8,7 @@ import logo from '../assets/EM-bluered.png'; // Ensure the path is correct
 const Header = () => {
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { isLoggedIn, isSubscribed, score, saveScore, logout, subscribe } = useContext(UserContext);
+  const { isLoggedIn, isSubscribed, score, logout, subscribe } = useContext(UserContext);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -37,7 +37,6 @@ const Header = () => {
           {isSubscribed ? (
             <div className="auth-section">
               <button onClick={logout}>Logout</button>
-              <button onClick={saveScore}>Save my score</button>
               <div>Score: {score}</div>
               <p>Thank you for subscribing</p>
               </div>
