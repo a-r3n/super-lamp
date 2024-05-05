@@ -36,15 +36,15 @@ router.post('/webhook', bodyParser.raw({ type: 'application/json', verify: rawBo
         case 'checkout.session.completed':
             const session = event.data.object;
             // Check for the presence of customer email in session
-            if (session.customer_email) {
-                const user = await User.findOne({ email: session.customer_email });
+            if (session.email) {
+                const user = await User.findOne({ email: session.email });
                 if (user) {
                     user.stripeCustomerId = session.customer; // Set Stripe customer ID
                     user.isSubscribed = true; // Set subscription status to true
                     await user.save();
                     console.log(`Subscription activated for ${user.email}`);
                 } else {
-                    console.log(`No user found with email: ${session.customer_email}`);
+                    console.log(`No user found with email: ${session.email}`);
                 }
             }
             break;
@@ -52,8 +52,8 @@ router.post('/webhook', bodyParser.raw({ type: 'application/json', verify: rawBo
         case 'customer.subscription.created':
         case 'customer.subscription.updated':
         case 'customer.subscription.deleted':
-            if (event.data.object.customer_email) {
-                const user = await User.findOne({ email: event.data.object.customer_email });
+            if (event.data.object.email) {
+                const user = await User.findOne({ email: event.data.object.email });
                 if (user) {
                     user.isSubscribed = event.data.object.status === 'active';
                     user.stripeCustomerId = event.data.object.customer; // Ensure customer ID is current

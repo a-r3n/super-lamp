@@ -36,9 +36,9 @@ const Header = () => {
         <>
           {isSubscribed ? (
             <div className="auth-section">
+              <p>Thank you for subscribing</p>
               <button onClick={logout}>Logout</button>
               <div>Score: {score}</div>
-              <p>Thank you for subscribing</p>
               </div>
           ) : (
             <div className="auth-section">
