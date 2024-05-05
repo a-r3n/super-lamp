@@ -30,10 +30,24 @@ export const UserProvider = ({ children }) => {
     setUserId(userId); // Set user ID upon login
   };
 
-  const subscribe = () => {
+  const subscribe = async () => {
     setIsSubscribed(true);
-    // Here you might want to call an API to update the subscription status in your backend
-  };
+
+    try {
+      await axios.post('/api/update-subscription', {
+          userId: userId,
+          isSubscribed: true
+      }, {
+          headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+      });
+      console.log('Subscription updated successfully!');
+  } catch (error) {
+      console.error('Failed to update subscription:', error);
+      setIsSubscribed(false);  // Revert if the update fails
+  }
+};
 
   const logout = () => {
     localStorage.removeItem('token');

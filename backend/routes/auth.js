@@ -71,6 +71,23 @@ router.post('/subscribe', async (req, res) => {
   }
 });
 
+router.post('/update-subscription', async (req, res) => {
+  const { userId, isSubscribed } = req.body;
+
+  try {
+      const user = await User.findById(userId);
+      if (!user) {
+          return res.status(404).send('User not found');
+      }
+      user.isSubscribed = isSubscribed;
+      await user.save();
+      res.send({ success: true, message: 'Subscription status updated.' });
+  } catch (error) {
+      console.error('Error updating subscription:', error);
+      res.status(500).send('Failed to update subscription status');
+  }
+});
+
 // Fetch questions based on subscription status and category
 router.get('/questions', async (req, res) => {
   const { category, isSubscribed } = req.query; // Extract category and subscription status from query parameters
