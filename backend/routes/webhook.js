@@ -11,6 +11,13 @@ const rawBodyBuffer = (req, res, buf, encoding) => {
     }
   };
 
+  router.all('/webhook', (req, res, next) => {
+    if (req.method !== 'POST') {
+        return res.status(405).send('Method Not Allowed');
+    }
+    next();
+});
+
   router.post('/webhook', bodyParser.raw({ type: 'application/json', verify: rawBodyBuffer }), async (req, res) => {
     console.log("Received webhook with raw body:", req.rawBody);  // Log the raw body
     const sig = req.headers['stripe-signature'];
