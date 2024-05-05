@@ -15,7 +15,7 @@ const questionSchema = new mongoose.Schema({
   },
   isSubscriberOnly: {
     type: Boolean,
-    default: false  // Assume questions are available to all by default
+    default: false 
   }
 });
 

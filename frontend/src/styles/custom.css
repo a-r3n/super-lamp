@@ -96,6 +96,7 @@ body {
   
   .content {
     padding-top: 00px; /* Adjust this value based on the actual height of your header */
+    padding-bottom: 50px;
   }
   
 .footer {

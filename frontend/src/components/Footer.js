@@ -4,6 +4,8 @@ import axios from 'axios';
 
 const Footer = () => {
     const [email, setEmail] = useState('');
+    const [submitStatus, setSubmitStatus] = useState('');
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -12,8 +14,10 @@ const Footer = () => {
             const response = await axios.post(`${apiUrl}/submit-email`, { email });
             console.log('Email submitted:', response.data.message);
             setEmail('');  // Clear input after submission
+            setSubmitStatus('Thank you for subscribing!');  // Set the thank you message
         } catch (error) {
             console.error('Error submitting email:', error);
+            setSubmitStatus('Failed to subscribe. Please try again later.');  // Set error message
         }
     };
 
@@ -30,6 +34,7 @@ const Footer = () => {
                 />
                 <button type="submit">Submit</button>
             </form>
+            {submitStatus && <p>{submitStatus}</p>}
         </div>
     );
 };
