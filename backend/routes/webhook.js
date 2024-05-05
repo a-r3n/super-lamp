@@ -7,7 +7,7 @@ const User = require('../models/User');  // Make sure the path to your User mode
 // Middleware to handle raw bodies only on the webhook route
 const rawBodyBuffer = (req, res, buf, encoding) => {
     if (buf && buf.length) {
-      req.rawBody = buf;
+        req.rawBody = buf.toString(encoding || 'utf8');
     }
   };
 
