@@ -36,12 +36,23 @@ const rawBodyBuffer = (req, res, buf, encoding) => {
     case 'checkout.session.completed':
       const session = event.data.object;
       // Perform operations after checkout session completion if needed
-      break;
+  // If the session includes a subscription ID, use it to update user records
+      if (session.subscription) {
+        const subscriptionId = session.subscription;
+        const customer = session.customer;
+        const user = await User.findOne({ stripeCustomerId: customer });
+    if (user) {
+      user.isSubscribed = true;  // Assuming completion means active subscription
+      await user.save();
+    }
+  }
+  break;
+
+
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
     case 'customer.subscription.deleted':
       const subscription = event.data.object;
-      // Handle subscription changes
       const customerId = subscription.customer;
       const isActive = subscription.status === 'active';
 
