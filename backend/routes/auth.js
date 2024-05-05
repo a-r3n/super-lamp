@@ -72,12 +72,22 @@ router.post('/subscribe', async (req, res) => {
   }
 });
 
-// Fetch questions based on subscription status
+// Fetch questions based on subscription status and category
 router.get('/questions', async (req, res) => {
+  const { category, isSubscribed } = req.query; // Extract category and subscription status from query parameters
   try {
-    const isSubscribed = req.query.isSubscribed === 'true'; // Example to get subscription status from query
-    const questions = await Question.find({ isSubscriberOnly: { $lte: isSubscribed } }); // Fetches all questions for non-subscribers and all for subscribers
-    res.json({ questions });
+    const queryConditions = {
+      category: category, // Filter by category
+      isSubscriberOnly: { $lte: isSubscribed === 'true' } // Fetches all questions for non-subscribers and all for subscribers
+    };
+
+    // Optionally remove category filter if none is specified
+    if (!category) {
+      delete queryConditions.category;
+    }
+
+    const questions = await Question.find(queryConditions); // Find questions with the specified conditions
+    res.json(questions);
   } catch (error) {
     console.error('Failed to fetch questions:', error);
     res.status(500).send("Error fetching questions");

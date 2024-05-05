@@ -9,13 +9,13 @@ mongoose.connect(dbURI)
   .catch(err => console.error('MongoDB connection error:', err));
 
 const questions = [
-  { questionText: "In the 12 months to December 2023, Australia’s inflation rate was 4.1%. In the 12 months to March 2024, has it gone up, gone down or stayed steady?", answer: "Gone down (to 3.6%)", hint: "The US and UK have both gone down in 2024", isSubscriberOnly: false },
-  { questionText: "The Government has announced HECS-HELP debt will increase by how much this year?", answer: "4.7%", hint: "It is similar to the rate of inflation", isSubscriberOnly: false },
-  { questionText: "The shareholders of which Australian fossil fuel company rejected the company’s climate transition action plan at it’s annual general meeting?", answer: "Woodside Energy (ASX: WDS)", hint: "It is Australia's largest oil and gas copy. They recently bought all of BHP's oil and gas assets", isSubscriberOnly: false },
-  { questionText: "Which business leader did Australian prime minister Anthony Albanese call an “arrogant billionaire” this week?", answer: "Elon Musk", hint: "This billionaire owns X (formerly Twitter)", isSubscriberOnly: false },
-  { questionText: "Which business leader did Australian prime minister Anthony Albanese call an “arrogant billionaire” this week?", answer: "Elon Musk", hint: "This billionaire owns X (formerly Twitter)", isSubscriberOnly: false },
-  { questionText: "Which business leader did Australian prime minister Anthony Albanese call an “arrogant billionaire” this week?", answer: "Elon Musk", hint: "This billionaire owns X (formerly Twitter)", isSubscriberOnly: false },
-  { questionText: "This is a subscriber only question", answer: "We got it to work!", hint: "This billionaire owns X (formerly Twitter)", isSubscriberOnly: true }
+  { questionText: "In the 12 months to December 2023, Australia’s inflation rate was 4.1%. In the 12 months to March 2024, has it gone up, gone down or stayed steady?", answer: "Gone down (to 3.6%)", hint: "The US and UK have both gone down in 2024", category: "Australia", isSubscriberOnly: false },
+  { questionText: "The Government has announced HECS-HELP debt will increase by how much this year?", answer: "4.7%", hint: "It is similar to the rate of inflation", category: "Australia", isSubscriberOnly: false },
+  { questionText: "The shareholders of which Australian fossil fuel company rejected the company’s climate transition action plan at it’s annual general meeting?", answer: "Woodside Energy (ASX: WDS)", hint: "It is Australia's largest oil and gas copy. They recently bought all of BHP's oil and gas assets", category: "Australia", isSubscriberOnly: false },
+  { questionText: "Which business leader did Australian prime minister Anthony Albanese call an “arrogant billionaire” this week?", answer: "Elon Musk", hint: "This billionaire owns X (formerly Twitter)", category: "World", isSubscriberOnly: false },
+  { questionText: "Which business leader did Australian prime minister Anthony Albanese call an “arrogant billionaire” this week?", answer: "Elon Musk", hint: "This billionaire owns X (formerly Twitter)", category: "World", isSubscriberOnly: false },
+  { questionText: "Which business leader did Australian prime minister Anthony Albanese call an “arrogant billionaire” this week?", answer: "Elon Musk", hint: "This billionaire owns X (formerly Twitter)", category: "World", isSubscriberOnly: false },
+  { questionText: "This is a subscriber only question", answer: "We got it to work!", hint: "This billionaire owns X (formerly Twitter)", category: "World", isSubscriberOnly: true }
 ];
 
 const seedDB = async () => {

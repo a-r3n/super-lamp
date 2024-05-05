@@ -1,6 +1,6 @@
 /* src/styles/custom.css */
 body {
-    background-color: #18263b; /* White background */
+    background-color: #ffffff; /* White background */
     color: #333;            /* Dark gray text */
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -98,6 +98,18 @@ body {
     padding-top: 100px; /* Adjust this value based on the actual height of your header */
   }
   
+.footer {
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f8f8f8;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .logo {

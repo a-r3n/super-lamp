@@ -18,8 +18,7 @@ const Footer = () => {
 
     return (
         <div className="footer">
-            <p>Want to keep up with the week's business news?</p>
-            <p>Sign up to our weekly email</p>
+            <p>Want to keep up with the week's business news? Sign up to our weekly email </p>
             <form onSubmit={handleSubmit}>
                 <input
                     type="email"
