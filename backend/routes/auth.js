@@ -117,12 +117,11 @@ router.get('/check-subscription/:userId', async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const subscription = await stripe.subscriptions.retrieve(user.stripeCustomerId);
-    res.json({ subscriptionStatus: subscription.status });
+  res.json({ subscriptionStatus: user.isSubscribed ? 'active' : 'inactive' });
   } catch (error) {
     console.error('Failed to retrieve subscription:', error);
     res.status(500).json({ error: error.message });
-  }
+}
 });
 
 module.exports = router;

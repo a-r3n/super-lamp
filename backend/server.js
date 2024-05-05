@@ -17,6 +17,8 @@ app.use(cors());
 // app.use(express.json());
 app.use('/api/auth', express.json(), authRoutes);
 app.use('/api/stripe', webhookRoutes);
+app.use('/api/check-subscription', express.json(), subscriptionRoutes); // Make sure this is correctly defined
+
 
 const port = process.env.PORT || 4000;
 const uri = process.env.MONGODB_URI;
