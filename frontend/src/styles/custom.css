@@ -1,6 +1,6 @@
 /* src/styles/custom.css */
 body {
-    background-color: #fff; /* White background */
+    background-color: #18263b; /* White background */
     color: #333;            /* Dark gray text */
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -17,7 +17,9 @@ body {
     border: 1px solid #ddd;    /* Border to separate questions */
     border-radius: 8px;
     padding: 20px;
-    margin-bottom: 20px;       /* Space between question cards */
+    margin-bottom: 20px;
+    margin: 20px auto;
+    width: 66%; 
   }
   
   .question-text {
@@ -57,6 +59,10 @@ body {
   }
 
   .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -65,13 +71,50 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
   
+  .logo {
+    width: auto;
+    height: auto;
+    cursor: pointer;
+    transition: width 0.3s ease-in-out;
+  }
+
+  .auth-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .login-text {
+    margin-top: 4px;
+    font-size: 0.8em;
+  }
+
   .header div {
     display: flex;
     gap: 10px;
   }
   
   .content {
-    padding-top: 60px; /* Adjust this value based on the actual height of your header */
+    padding-top: 100px; /* Adjust this value based on the actual height of your header */
   }
   
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .logo {
+    width: 60px; /* Smaller size on smaller screens */
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .logo {
+    width: 70px; /* Medium size on medium screens */
+  }
+}
+
+@media (min-width: 1025px) {
+  .logo {
+    width: 5vw; /* Scale based on viewport width on larger screens */
+  }
+}
+
   
