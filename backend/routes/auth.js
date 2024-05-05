@@ -1,74 +1,73 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); 
-const Question = require('../models/question'); 
+const User = require('../models/User');
+const Question = require('../models/question');
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';  // Fallback secret
 
 const createStripeCustomer = async (user) => {
   const stripeCustomer = await stripe.customers.create({
-    email: user.email // Assuming you have an email field or similar identifier
+    email: user.email  // Use the email field for creating Stripe customer
   });
   user.stripeCustomerId = stripeCustomer.id;
   await user.save();
 };
 
 router.post('/register', async (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password || password.length < 6) {
-      return res.status(400).send("Invalid data provided.");
+  const { email, password } = req.body;
+  if (!email || !password || password.length < 6) {
+    return res.status(400).send("Invalid data provided.");
+  }
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).send("Registration failed: The user already exists"); // 409 Conflict
     }
-    try {
-      const existingUser = await User.findOne({ username });
-      if (existingUser) {
-        return res.status(409).send("Registration failed: The user already exists"); // 409 Conflict
-      }
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = new User({ username, password: hashedPassword });
-      await newUser.save();
-      const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '1h' });
-      res.status(201).send({ token });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Error registering new user.");
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ email, password: hashedPassword });
+    await newUser.save();
+    const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '1h' });
+    res.status(201).send({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error registering new user.");
+  }
+});
+
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).send("Invalid data provided.");
+  }
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).send("Login failed: This user does not exist"); // 404 Not Found
     }
-  });
-  
-  router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    if (!username || !password) {
-      return res.status(400).send("Invalid data provided.");
+    if (!await bcrypt.compare(password, user.password)) {
+      return res.status(401).send("Authentication failed.");
     }
-    try {
-      const user = await User.findOne({ username });
-      if (!user) {
-        return res.status(404).send("Login failed: This user does not exist"); // 404 Not Found
-      }
-      if (!await bcrypt.compare(password, user.password)) {
-        return res.status(401).send("Authentication failed.");
-      }
-      const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
-      res.send({ token });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Error logging in.");
-    }
-  });
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
+    res.send({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error logging in.");
+  }
+});
 
 router.post('/subscribe', async (req, res) => {
   const { userId } = req.body; // Make sure to authenticate and validate
 
   try {
-      const user = await User.findById(userId);
-      user.isSubscribed = true;
-      await user.save();
-      res.send({ success: true, message: "Subscription updated successfully." });
+    const user = await User.findById(userId);
+    user.isSubscribed = true;
+    await user.save();
+    res.send({ success: true, message: "Subscription updated successfully." });
   } catch (error) {
-      res.status(500).send({ success: false, message: "Failed to update subscription." });
+    res.status(500).send({ success: false, message: "Failed to update subscription." });
   }
 });
 
@@ -101,7 +100,7 @@ router.get('/check-subscription/:userId', async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId);
+    const subscription = await stripe.subscriptions.retrieve(user.stripeCustomerId);
     res.json({ subscriptionStatus: subscription.status });
   } catch (error) {
     console.error('Failed to retrieve subscription:', error);
