@@ -22,6 +22,7 @@ const Quiz = () => {
         }
       });
       const fetchedQuestions = response.data.data.getQuestions;
+      console.log('Is Subscribed Status in Quiz:', isSubscribed);  // Log the subscription status
       const visibleQuestions = fetchedQuestions.filter(q => !q.isSubscriberOnly || isSubscribed);
       setQuestions(visibleQuestions);
     } catch (error) {

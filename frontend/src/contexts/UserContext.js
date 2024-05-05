@@ -15,8 +15,10 @@ export const UserProvider = ({ children }) => {
       try {
         const response = await axios.get(`/api/check-subscription/${userId}`);
         setIsSubscribed(response.data.subscriptionStatus === 'active');
+        console.log('Subscription status fetched and set:', response.data.subscriptionStatus === 'active'); // Log the result
       } catch (error) {
         console.error('Error checking subscription status:', error);
+        setIsSubscribed(false); 
       }
     };
 
