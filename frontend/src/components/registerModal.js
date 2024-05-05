@@ -27,7 +27,7 @@ const RegisterModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={onClose} contentLabel="Register Modal">
+    <Modal isOpen={isOpen} onRequestClose={onClose} contentLabel="Register Modal" className="modal-container" overlayClassName="modal-overlay">
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />

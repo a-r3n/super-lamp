@@ -29,7 +29,7 @@ const LoginModal = ({ isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onRequestClose={onClose} contentLabel="Login Modal">
+    <Modal isOpen={isOpen} onRequestClose={onClose} contentLabel="Login Modal" className="modal-container" overlayClassName="modal-overlay">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />

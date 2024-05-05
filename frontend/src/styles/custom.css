@@ -121,6 +121,32 @@ body {
   margin-bottom: 20px;
 }
 
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75); /* Dimmed background */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Aligns the modal to start from below the header */
+}
+
+.modal-container {
+  width: 100%; /* Full width of the viewport */
+  box-sizing: border-box; /* Ensures padding and border are included in width/height */
+  position: relative; /* Relative to the overlay */
+  margin-top: 50px; /* Adjust based on your header's height */
+  background-color: white; /* Background color of the modal */
+  padding: 20px; /* Padding inside the modal */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Optional: Adds shadow for better visibility */
+  max-height: 90vh; /* Prevents the modal from being too tall */
+  overflow-y: auto; /* Allows scrolling within the modal if content is too long */
+}
+
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .logo {
