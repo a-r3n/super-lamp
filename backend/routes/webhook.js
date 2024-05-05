@@ -19,7 +19,7 @@ router.all('/webhook', (req, res, next) => {
 });
 
 router.post('/webhook', bodyParser.raw({ type: 'application/json', verify: rawBodyBuffer }), async (req, res) => {
-    console.log("Received webhook with raw body:", req.rawBody);  // Log the raw body
+    console.log("Received webhook with raw body:", req.rawBody);
     const sig = req.headers['stripe-signature'];
 
     let event;
@@ -31,47 +31,53 @@ router.post('/webhook', bodyParser.raw({ type: 'application/json', verify: rawBo
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    // Handle the event
-    switch (event.type) {
-        case 'checkout.session.completed':
-            const session = event.data.object;
-            // Check for the presence of customer email in session
-            if (session.email) {
-                const user = await User.findOne({ email: session.email });
-                if (user) {
-                    user.stripeCustomerId = session.customer; // Set Stripe customer ID
-                    user.isSubscribed = true; // Set subscription status to true
-                    await user.save();
-                    console.log(`Subscription activated for ${user.email}`);
+    try {
+        switch (event.type) {
+            case 'checkout.session.completed':
+                const session = event.data.object;
+                const email = session.customer_email || (session.customer_details && session.customer_details.email);
+                if (email) {
+                    const user = await User.findOne({ email: email });
+                    if (user) {
+                        user.stripeCustomerId = session.customer;
+                        user.isSubscribed = true;
+                        await user.save();
+                        console.log(`Subscription activated for ${user.email}`);
+                    } else {
+                        console.log(`No user found with email: ${email}`);
+                    }
                 } else {
-                    console.log(`No user found with email: ${session.email}`);
+                    console.log('No email provided in the webhook data');
                 }
-            }
-            break;
+                break;
 
-        case 'customer.subscription.created':
-        case 'customer.subscription.updated':
-        case 'customer.subscription.deleted':
-            if (event.data.object.email) {
-                const user = await User.findOne({ email: event.data.object.email });
-                if (user) {
-                    user.isSubscribed = event.data.object.status === 'active';
-                    user.stripeCustomerId = event.data.object.customer; // Ensure customer ID is current
-                    await user.save();
-                    console.log(`Updated subscription status for ${user.email} to ${event.data.object.status}`);
-                } else {
-                    console.log(`No user found with email: ${event.data.object.customer_email}`);
+            case 'customer.subscription.created':
+            case 'customer.subscription.updated':
+            case 'customer.subscription.deleted':
+                const customerEmail = event.data.object.email;
+                if (customerEmail) {
+                    const user = await User.findOne({ email: customerEmail });
+                    if (user) {
+                        user.isSubscribed = event.data.object.status === 'active';
+                        user.stripeCustomerId = event.data.object.customer;
+                        await user.save();
+                        console.log(`Updated subscription status for ${user.email} to ${event.data.object.status}`);
+                    } else {
+                        console.log(`No user found with email: ${customerEmail}`);
+                    }
                 }
-            }
-            break;
+                break;
 
-        default:
-            console.log(`Unhandled event type ${event.type}`);
-            break;
+            default:
+                console.log(`Unhandled event type ${event.type}`);
+        }
+    } catch (error) {
+        console.error('Error processing the webhook:', error);
+        res.status(500).send('Internal Server Error');
     }
 
-    // Return a response to acknowledge receipt of the event
     res.json({ received: true });
 });
+
 
 module.exports = router;
