@@ -21,8 +21,9 @@ export const UserProvider = ({ children }) => {
     const checkSubscriptionStatus = async () => {
         if (!isLoggedIn || !userId) return;
         try {
-            const response = await axios.get(`/api/check-subscription/${userId}`, {
-                headers: {
+          const apiUrl = process.env.REACT_APP_API_URL;  
+          const response = await axios.get(`${apiUrl}/api/check-subscription/${userId}`, {
+            headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
