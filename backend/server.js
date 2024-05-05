@@ -10,6 +10,7 @@ const path = require('path');
 const authRoutes = require('./routes/auth');
 const webhookRoutes = require('./routes/webhook');
 const Subscriber = require('./models/Subscriber');
+const jwt = require('jsonwebtoken');
 const subscriptionRoutes = require('./routes/subscriptionRoutes'); 
 
 
@@ -48,7 +49,24 @@ async function startServer() {
             res.status(500).send({ message: 'Failed to save email' });
         }
     });
-    
+
+// Middleware to handle authentication
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    });
+};
+
+// Apply authentication middleware to the subscription check route
+app.use('/api/check-subscription', authenticateToken, subscriptionRoutes);
+
+
     // Serve static files from the React app
     app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
 

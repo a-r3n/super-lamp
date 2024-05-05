@@ -145,7 +145,13 @@ body {
   overflow-y: auto; /* Allows scrolling within the modal if content is too long */
 }
 
-
+.Paragraph {
+  font-size: 24px;
+  color: #ffffff;
+  text-align: center;
+  width: 66%; 
+  margin: 20px auto;
+}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

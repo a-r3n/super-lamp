@@ -11,19 +11,21 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const checkSubscriptionStatus = async () => {
-      if (!isLoggedIn || !userId) return;
-      try {
-        const response = await axios.get(`/api/check-subscription/${userId}`);
-        setIsSubscribed(response.data.subscriptionStatus === 'active');
-        console.log('Subscription status fetched and set:', response.data.subscriptionStatus === 'active'); // Log the result
-      } catch (error) {
-        console.error('Error checking subscription status:', error);
-        setIsSubscribed(false); 
-      }
+        if (!isLoggedIn || !userId) return;
+        try {
+            const response = await axios.get(`/api/check-subscription/${userId}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setIsSubscribed(response.data.isSubscribed); // Make sure this matches the response structure
+        } catch (error) {
+            console.error('Error checking subscription status:', error);
+        }
     };
 
     checkSubscriptionStatus();
-  }, [isLoggedIn, userId]);
+}, [isLoggedIn, userId]);
 
   const login = (token, userId) => {
     localStorage.setItem('token', token);

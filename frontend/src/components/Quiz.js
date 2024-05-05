@@ -58,7 +58,7 @@ const Quiz = () => {
   return (
     <div className="content">
       <img src={heroImage} alt="Hero" className="hero-image" />
-      <p> With so much </p>
+      <p className="Paragraph"> With so much happening in the world of business and finance, catch up with the Equity Mates weekend quiz</p>
       {questions.map(question => (
         <div className="question-card" key={question.id}>
           <p className="question-text" dangerouslySetInnerHTML={{ __html: question.questionText }}></p>
