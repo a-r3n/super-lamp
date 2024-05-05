@@ -8,11 +8,14 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const authRoutes = require('./routes/auth');
+const webhookRoutes = require('./routes/webhook');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/api/auth', authRoutes);
+app.use('/api/stripe', webhookRoutes);
+
 
 
 const port = process.env.PORT || 4000;
