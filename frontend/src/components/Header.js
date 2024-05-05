@@ -30,7 +30,7 @@ const Header = () => {
         <div className="auth-section">
         <button onClick={() => setShowRegisterModal(true)}>Register</button>
         <button onClick={() => setShowLoginModal(true)}>Login</button>
-        <p className="login-text">Log in to save your score</p>
+        <p className="login-text">Log in to keep your score</p>
       </div>
       ) : (
         <>
