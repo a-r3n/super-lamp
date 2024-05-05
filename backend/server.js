@@ -12,11 +12,9 @@ const webhookRoutes = require('./routes/webhook');
 
 const app = express();
 app.use(cors());
-app.use(express.json());
-app.use('/api/auth', authRoutes);
+// app.use(express.json());
+app.use('/api/auth', express.json(), authRoutes);
 app.use('/api/stripe', webhookRoutes);
-
-
 
 const port = process.env.PORT || 4000;
 const uri = process.env.MONGODB_URI;
@@ -34,7 +32,7 @@ async function startServer() {
     console.log("MongoDB connected successfully.");
 
     // Handle email submission
-    app.post('/submit-email', async (req, res) => {
+    app.post('/submit-email', express.json(), async (req, res) => {
         const { email } = req.body;
         try {
             // Assuming you have a mongoose model `Subscriber`
