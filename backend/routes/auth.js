@@ -9,6 +9,14 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';  // Fallback secret
 
+const createStripeCustomer = async (user) => {
+  const stripeCustomer = await stripe.customers.create({
+    email: user.email // Assuming you have an email field or similar identifier
+  });
+  user.stripeCustomerId = stripeCustomer.id;
+  await user.save();
+};
+
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password || password.length < 6) {
