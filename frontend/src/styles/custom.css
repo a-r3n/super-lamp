@@ -8,7 +8,7 @@ body {
   }
   
   h1 {
-    color: #333;            /* Dark color for headings */
+    color: #ffffff;            /* Dark color for headings */
     text-align: center;     /* Center align the main heading */
   }
   
@@ -72,7 +72,7 @@ body {
   }
   
   .logo {
-    width: auto;
+    width: 2000px;
     height: auto;
     cursor: pointer;
     transition: width 0.3s ease-in-out;
@@ -112,7 +112,7 @@ body {
 }
 
 .hero-image {
-  padding-top: 50px;
+  padding-top: 70px;
   width: 100%;
   top: 0;
   left: 0;

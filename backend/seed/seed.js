@@ -9,13 +9,57 @@ mongoose.connect(dbURI)
   .catch(err => console.error('MongoDB connection error:', err));
 
 const questions = [
-  { questionText: "In the 12 months to December 2023, Australia’s inflation rate was 4.1%. In the 12 months to March 2024, has it gone up, gone down or stayed steady?", answer: "Gone down (to 3.6%)", category: "Australia", isSubscriberOnly: true },
-  { questionText: "The Government has announced HECS-HELP debt will increase by how much this year?", answer: "4.7%", category: "Australia", isSubscriberOnly: false },
-  { questionText: "The shareholders of which Australian fossil fuel company rejected the company’s climate transition action plan at it’s annual general meeting?", answer: "Woodside Energy (ASX: WDS)", category: "Australia", isSubscriberOnly: false },
-  { questionText: "Which business leader did Australian prime minister Anthony Albanese call an “arrogant billionaire” this week?", answer: "Elon Musk", category: "World", isSubscriberOnly: false },
-  { questionText: "Which business leader did Australian prime minister Anthony Albanese call an “arrogant billionaire” this week?", answer: "Elon Musk", category: "World", isSubscriberOnly: false },
-  { questionText: "Which business leader did Australian prime minister Anthony Albanese call an “arrogant billionaire” this week?", answer: "Elon Musk", category: "World", isSubscriberOnly: false },
-  { questionText: "This is a subscriber only question", answer: "We got it to work!", category: "World", isSubscriberOnly: true }
+
+  { questionText: "Which business leader did Australian prime minister Anthony Albanese call an “arrogant billionaire” last week?", 
+    answer: "Elon Musk", 
+    category: "World", 
+    isSubscriberOnly: false },
+
+    { questionText: "Which Australian airline experienced an IT issue this week that saw users served the frequent flyer and booking details of other passengers?", 
+    answer: "Qantas", 
+    category: "Australia", 
+    isSubscriberOnly: false },
+
+  { questionText: "In the 12 months to December 2023, Australia’s inflation rate was 4.1%. In the 12 months to March 2024, has it: <br><br> a) Gone up <br> b) Stayed steady <br> c) Gone down", 
+    answer: "c) Gone down (to 3.6%)", 
+    category: "Australia", 
+    isSubscriberOnly: false },
+
+  { questionText: "Which company announced the largest stock buyback ever, with plans to buy back $110 billion of its own shares?", 
+    answer: "Apple", 
+    category: "World", 
+    isSubscriberOnly: false },
+
+  { questionText: "Bumble, the dating app famous for requiring women to make the first move, has made a big change to its platform. What did it change?", 
+    answer: "Women no longer have to make the first move", 
+    category: "World", 
+    isSubscriberOnly: false },
+
+  { questionText: "FreeTV, a lobby group representing Australia’s commercial free-to-air television networks, calculated that they have lost what percentage of young viewers to YouTube and TikTok? <br><br> a) 26% <br> b) 37% <br> c) 61% <br> d) 83%", 
+    answer: "d) 83%", 
+    category: "Australia", 
+    isSubscriberOnly: true },
+
+    { questionText: "US lawmakers have passed a law that will ban which social media platform in the US if not sold to an approved buyer in the next 9 months", 
+    answer: "TikTok", 
+    category: "World", 
+    isSubscriberOnly: true },
+
+    { questionText: "The world's largest election is currently underway in which country?", 
+    answer: "India, where an estimated 969 million people will vote", 
+    category: "World", 
+    isSubscriberOnly: true },
+
+    { questionText: "This week, Donald Trump has been in court in New York for which of his 4 criminal trials? <br><br> a) Paying hush money to a porn star <br> b) Taking classified documents <br> c) Federal election interference <br> d) Election interference in Georgia", 
+    answer: "a) Paying hush money to a porn star", 
+    category: "World", 
+    isSubscriberOnly: true },
+
+  { questionText: "A single-car garage recently sold for $500,000 in which Sydney suburb?", 
+    answer: "Woollahra", 
+    category: "Australia", 
+    isSubscriberOnly: true }
+
 ];
 
 const seedDB = async () => {
