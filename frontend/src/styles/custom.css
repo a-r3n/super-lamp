@@ -71,8 +71,8 @@ body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
   
-  .logo {
-    width: 2000px;
+  .EMlogo {
+    width: 150px;
     height: auto;
     cursor: pointer;
     transition: width 0.3s ease-in-out;
@@ -119,6 +119,16 @@ body {
   right: 0;  
   height: auto; 
   margin-bottom: 20px;
+}
+
+.footerImage {
+  padding-top: 70px;
+  width: 100%;
+  top: 0;
+  left: 0;
+  right: 0;  
+  height: auto; 
+  margin-bottom: 0px;
 }
 
 .modal-overlay {

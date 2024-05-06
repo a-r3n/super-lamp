@@ -24,7 +24,7 @@ const Header = () => {
 
   return (
     <div className="header">
-      <img src={logo} alt="EM Logo" className="logo" onClick={scrollToTop} />
+      <img src={logo} alt="EM Logo" className="EMlogo" onClick={scrollToTop} />
       <h3>Weekly News Quiz</h3>
       {!isLoggedIn ? (
         <div className="auth-section">

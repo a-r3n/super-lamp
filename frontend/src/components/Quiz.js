@@ -3,6 +3,7 @@ import axios from 'axios';
 import { UserContext } from '../contexts/UserContext';
 import '../styles/custom.css';
 import heroImage from '../assets/placeholder.png'; 
+// import footerImage from '../assets/footer-image.png'; 
 
 
 const Quiz = () => {
@@ -68,6 +69,7 @@ const Quiz = () => {
           <button className="button" onClick={() => handleCorrect(question.id)} disabled={question.correct}>Correct</button>
         </div>
       ))}
+      {/* <img src={footerImage} alt="footerImage" className="footerImage" /> */}
     </div>
   );
 };
