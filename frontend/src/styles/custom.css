@@ -113,6 +113,9 @@ body {
   .content {
     padding-top: 50px; /* Even smaller padding to match the smaller header */
   }
+  .news-quiz-title {
+    display: none;
+  }
 }
 
   .auth-section {

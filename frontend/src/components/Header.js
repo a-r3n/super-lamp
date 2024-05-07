@@ -25,7 +25,7 @@ const Header = () => {
   return (
     <div className="header">
       <img src={logo} alt="EM Logo" className="EMlogo" onClick={scrollToTop} />
-      <h3>Weekly News Quiz</h3>
+      <h3 class="news-quiz-title">Weekly News Quiz</h3>
       {!isLoggedIn ? (
         <div className="auth-section">
         <button onClick={() => setShowRegisterModal(true)}>Register</button>
