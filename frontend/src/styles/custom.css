@@ -18,7 +18,8 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around; /* This centers the cards nicely and handles spacing */
-
+    padding-left: 5%; 
+    padding-right: 5%; 
   }
 
   .question-card {
@@ -86,6 +87,20 @@ body {
     cursor: pointer;
     transition: width 0.3s ease-in-out;
   }
+
+/* Responsive adjustments for medium screens */
+@media (max-width: 768px) {
+  .EMlogo {
+    width: 100px; /* Smaller width for medium screens */
+  }
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 480px) {
+  .EMlogo {
+    width: 60px; /* Even smaller width for small screens */
+  }
+}
 
   .auth-section {
     display: flex;
