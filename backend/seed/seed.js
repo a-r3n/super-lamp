@@ -25,6 +25,11 @@ const questions = [
     category: "Australia", 
     isSubscriberOnly: false },
 
+    { questionText: "Australia's Reserve Bank met this week to decide on the official cash rate, currently at 4.35%. Did they: <br><br> a) Raise rates <br> b) Keep rates steady <br> c) Cut rates", 
+    answer: "b) Stay steady", 
+    category: "Australia", 
+    isSubscriberOnly: false },
+
   { questionText: "Which company announced the largest stock buyback ever, with plans to buy back $110 billion of its own shares?", 
     answer: "Apple", 
     category: "World", 
@@ -45,13 +50,18 @@ const questions = [
     category: "World", 
     isSubscriberOnly: true },
 
-    { questionText: "The world's largest election is currently underway in which country?", 
-    answer: "India, where an estimated 969 million people will vote", 
-    category: "World", 
+    { questionText: "According to the Australian Financial Review, how much has the price of the median Sydney house risen in the past 10 years? <br><br> a) 62% <br> b) 77% <br> c) 92% <br> d) 107%", 
+    answer: "d) 107%", 
+    category: "Australia", 
     isSubscriberOnly: true },
 
     { questionText: "This week, Donald Trump has been in court in New York for which of his 4 criminal trials? <br><br> a) Paying hush money to a porn star <br> b) Taking classified documents <br> c) Federal election interference <br> d) Election interference in Georgia", 
     answer: "a) Paying hush money to a porn star", 
+    category: "World", 
+    isSubscriberOnly: true },
+
+    { questionText: "The world's largest election is currently underway in which country?", 
+    answer: "India, where an estimated 969 million people will vote", 
     category: "World", 
     isSubscriberOnly: true },
 

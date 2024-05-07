@@ -12,14 +12,24 @@ body {
     text-align: center;     /* Center align the main heading */
   }
   
+  .content {
+    padding-top: 00px; /* Adjust this value based on the actual height of your header */
+    padding-bottom: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; /* This centers the cards nicely and handles spacing */
+    padding-left: 80px; 
+    padding-right: 80px; 
+  }
+
   .question-card {
     background-color: #f9f9f9; /* Light gray background for questions */
     border: 1px solid #ddd;    /* Border to separate questions */
     border-radius: 8px;
     padding: 20px;
-    margin-bottom: 20px;
-    margin: 20px auto;
-    width: 66%; 
+    margin: 10px; /* Adjusted for better spacing in a grid layout */
+    box-sizing: border-box; /* Include padding and border in the width calculation */
+    width: calc(50% - 20px); /* Subtract margin from the 50% width */
   }
   
   .question-text {
@@ -94,11 +104,6 @@ body {
     gap: 10px;
   }
   
-  .content {
-    padding-top: 00px; /* Adjust this value based on the actual height of your header */
-    padding-bottom: 50px;
-  }
-  
 .footer {
   top: 0;
   left: 0;
@@ -163,22 +168,11 @@ body {
   margin: 20px auto;
 }
 
+
 /* Responsive adjustments */
-@media (max-width: 768px) {
-  .logo {
-    width: 60px; /* Smaller size on smaller screens */
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .logo {
-    width: 70px; /* Medium size on medium screens */
-  }
-}
-
-@media (min-width: 1025px) {
-  .logo {
-    width: 5vw; /* Scale based on viewport width on larger screens */
+@media (max-width: 1080px) {
+  .question-card {
+    width: calc(100% - 100px); /* Full width on smaller screens, subtract margin */
   }
 }
 

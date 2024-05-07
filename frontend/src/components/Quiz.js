@@ -57,20 +57,24 @@ const Quiz = () => {
   };
 
   return (
-    <div className="content">
-      <img src={heroImage} alt="Hero" className="hero-image" />
-      <h1> Have you been paying attention? </h1>
-      <p className="Paragraph"> Catch up on what's happening in the world of business and finance with the Equity Mates weekend quiz</p>
-      {questions.map(question => (
-        <div className="question-card" key={question.id}>
-          <p className="question-text" dangerouslySetInnerHTML={{ __html: question.questionText }}></p>
-          <p className={`answer-text ${question.showAnswer ? 'visible' : ''}`}>{question.answer}</p>
-          <button className="button" onClick={() => handleShowAnswer(question.id)}>Show Answer</button>
-          <button className="button" onClick={() => handleCorrect(question.id)} disabled={question.correct}>Correct</button>
-        </div>
-      ))}
-      {/* <img src={footerImage} alt="footerImage" className="footerImage" /> */}
-    </div>
+    <>
+      <div>
+        <img src={heroImage} alt="Hero" className="hero-image" />
+        <h1> Have you been paying attention? </h1>
+        <p className="Paragraph"> Catch up on what's happening in the world of business and finance with the Equity Mates weekend quiz</p>
+      </div>
+      <div className="content">
+        {questions.map(question => (
+          <div className="question-card" key={question.id}>
+            <p className="question-text" dangerouslySetInnerHTML={{ __html: question.questionText }}></p>
+            <p className={`answer-text ${question.showAnswer ? 'visible' : ''}`}>{question.answer}</p>
+            <button className="button" onClick={() => handleShowAnswer(question.id)}>Show Answer</button>
+            <button className="button" onClick={() => handleCorrect(question.id)} disabled={question.correct}>Correct</button>
+          </div>
+        ))}
+        {/* <img src={footerImage} alt="footerImage" className="footerImage" /> */}
+      </div>
+    </>
   );
 };
 
