@@ -95,7 +95,7 @@ body {
     width: 100px; /* Smaller width for medium screens */
   }
   .header {
-    height: 50px; /* Smaller height for medium screens */
+    height: 60px; /* Smaller height for medium screens */
   }
   .content {
     padding-top: 60px; /* Smaller padding to match the smaller header */
@@ -108,7 +108,7 @@ body {
     width: 60px; /* Even smaller width for small screens */
   }
   .header {
-    height: 40px; /* Even smaller height for small screens */
+    height: 50px; /* Even smaller height for small screens */
   }
   .content {
     padding-top: 50px; /* Even smaller padding to match the smaller header */
