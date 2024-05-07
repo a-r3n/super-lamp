@@ -13,13 +13,12 @@ body {
   }
   
   .content {
-    padding-top: 00px; /* Adjust this value based on the actual height of your header */
+    padding-top: 00px; 
     padding-bottom: 50px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around; /* This centers the cards nicely and handles spacing */
-    padding-left: 80px; 
-    padding-right: 80px; 
+
   }
 
   .question-card {
