@@ -13,7 +13,7 @@ body {
   }
   
   .content {
-    padding-top: 00px; 
+    padding-top: 70px; 
     padding-bottom: 50px;
     display: flex;
     flex-wrap: wrap;
@@ -73,6 +73,7 @@ body {
     top: 0;
     left: 0;
     right: 0;
+    height: 60px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -93,12 +94,24 @@ body {
   .EMlogo {
     width: 100px; /* Smaller width for medium screens */
   }
+  .header {
+    height: 50px; /* Smaller height for medium screens */
+  }
+  .content {
+    padding-top: 60px; /* Smaller padding to match the smaller header */
+  }
 }
 
 /* Responsive adjustments for small screens */
 @media (max-width: 480px) {
   .EMlogo {
     width: 60px; /* Even smaller width for small screens */
+  }
+  .header {
+    height: 40px; /* Even smaller height for small screens */
+  }
+  .content {
+    padding-top: 50px; /* Even smaller padding to match the smaller header */
   }
 }
 
